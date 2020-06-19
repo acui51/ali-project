@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ALI</title>
+
+    <!-- These two lines provide automatic page and style reloading when files change -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/lib/client/updater.js" defer></script>
+
+    <!-- Icon Code -->
+    <script
+      src="https://kit.fontawesome.com/742429caaf.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Montserrat:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- CSS Stylesheet -->
+
+    <!-- CSS Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css" />
+
+    <!-- Javascript -->
+    <script type="module" src="/profile.js"></script>
+    <script type="text/javascript">
+      imgError = (image) => {
+        image.onerror = "";
+        image.src = "/images/logo.png";
+        return true;
+      };
+    </script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  </head>
+
+  <body>
+    <!-- Title Section -->
+    <section id="title-profile">
+      <div class="container-fluid">
+        <!-- Nav Bar -->
+        <nav id="navbar">
+          <div class="navbar">
+            <a class="item" href="/"
+              ><img
+                id="logo"
+                src="/images/logo.svg"
+                alt="logo-image"
+                onerror="imgError(this)"
+            /></a>
+            <a class="item title" href="/">ResearchHub</a>
+            <a class="item page right-push" href="/projects">Open Projects</a>
+            <a class="item page" href="projects.html">Self-Designed</a>
+            <a class="item last-item" id="icon" href="profile.html"
+              ><i class="far fa-user-circle fa-2x"></i
+            ></a>
+          </div>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Profile Information -->
+    <section id="profile">
+      <div class="prof-info">
+        <div class="prof-box prof-left">
+          <!-- Profile Header -->
+          <div class="prof-left-head">
+            <i class="far fa-user fa-3x" style="margin: 20px 0;"></i>
+            <div>
+              <div id="nameContainer"></div>
+            </div>
+            <div>
+              <div id="schoolContainer"></div>
+            </div>
+          </div>
+
+          <!-- Questions/Answers-->
+          <section class="questions">
+            <div id="template">
+              <h3></h3>
+              <!-- Add to DOM here-->
+              <div class="question"></div>
+            </div>
+          </section>
+        </div>
+        <div class="prof-box prof-right">
+          <!-- Projects Header -->
+          <div class="prof-right-head">
+            <h1>Following</h1>
+          </div>
+          <div class="following">
+            <div id="template" class="proj-title fa-ul">
+              <li class="title"><span class="fa-li"></span></li>
+              <ul class="proj-caption">
+                <li class="dept"></li>
+                <li>
+                  <button type="submit" id="continue-apply">Apply</button>
+                </li>
+              </ul>
+            </div>
+
+            <ul id="follow" class="proj-title fa-ul"></ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="footer">
+      <div class="footer-content">
+        <div class="contact">
+          <h3>Contact Us</h3>
+          <p>
+            If you have a question or suggestion, or want to work with us, we'd
+            love to hear from you!
+          </p>
+        </div>
+        <div class="partners">
+          <h3>Partners</h3>
+          <img src="/images/partners.png" alt="" />
+        </div>
+        <div class="people">
+          <h3>People</h3>
+          <p>Alix Cui</p>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

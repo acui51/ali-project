@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <title>ResearchHub</title>
+
+    <!-- These two lines provide automatic page and style reloading when files change -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/lib/client/updater.js" defer></script>
+
+    <!-- Icon Code -->
+    <script
+      src="https://kit.fontawesome.com/742429caaf.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Google Fonts -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300&family=Montserrat:wght@800&display=swap"
+      rel="stylesheet"
+    />
+    <!-- CSS Stylesheet -->
+
+    <!-- Javascript -->
+    <script type="module" src="/projects.js"></script>
+
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="/css/style.css" />
+    <script type="text/javascript">
+      imgError = (image) => {
+        image.onerror = "";
+        image.src = "/images/logo.png";
+        return true;
+      };
+    </script>
+    <script
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+      defer
+    ></script>
+  </head>
+
+  <body>
+    <!-- Background -->
+    <div class="background"></div>
+
+    <!-- Title Section -->
+    <section id="title">
+      <div class="container-fluid">
+        <!-- Nav Bar -->
+        <nav id="navbar">
+          <div class="navbar">
+            <a class="item" href="/"
+              ><img
+                id="logo"
+                src="/images/logo.svg"
+                alt="logo-image"
+                onerror="imgError(this)"
+            /></a>
+            <a class="item title" href="/">ResearchHub</a>
+            <a class="item page right-push" href="/projects">Open Projects</a>
+            <a class="item page" href="projects.html">Self-Designed</a>
+            <a class="hidden item last-item" id="icon" href="profile.html"
+              ><i class="far fa-user-circle fa-2x"></i
+            ></a>
+            <form class="item page last-item" id="loginForm"></form>
+            <button
+              id="sign-out"
+              class="item page last-item"
+              style="display: none;"
+            >
+              Logout
+            </button>
+          </div>
+        </nav>
+      </div>
+    </section>
+
+    <!-- Projects Section -->
+    <section id="projects">
+      <div class="project-categories">
+        <!-- Categories -->
+        <div
+          class="categ"
+          id="biology"
+          style="
+            background-image: linear-gradient(
+                rgba(0, 0, 0, 0.5),
+                rgba(0, 0, 0, 0.5)
+              ),
+              url('/images/dna-solid.svg');
+          "
+        >
+          <span>Biology</span>
+        </div>
+        <div
+          class="categ"
+          id="computer-science"
+          style="
+            background-image: linear-gradient(
+                rgba(0, 0, 0, 0.5),
+                rgba(0, 0, 0, 0.5)
+              ),
+              url('/images/python-brands.svg');
+          "
+        >
+          <span>Computer Science</span>
+        </div>
+        <div
+          class="categ"
+          id="chemistry"
+          style="
+            background-image: linear-gradient(
+                rgba(0, 0, 0, 0.5),
+                rgba(0, 0, 0, 0.5)
+              ),
+              url('/images/atom-solid.svg');
+          "
+        >
+          <span>Chemistry</span>
+        </div>
+        <div
+          class="categ"
+          id="physics"
+          style="
+            background-image: linear-gradient(
+                rgba(0, 0, 0, 0.5),
+                rgba(0, 0, 0, 0.5)
+              ),
+              url('/images/wave.svg');
+          "
+        >
+          <span>Physics</span>
+        </div>
+
+        <!-- One category + projects -->
+        <div id="categ-col" class="hidden">
+          <div class="sidebar categ-biology">
+            <a href="/projects/biology" class="sidebar-categ">Biology</a>
+          </div>
+          <div class="sidebar categ-computer-science">
+            <a href="/projects/computer-science" class="sidebar-categ"
+              >Computer Science</a
+            >
+          </div>
+          <div class="sidebar categ-chemistry">
+            <a href="/projects/chemistry" class="sidebar-categ">Chemistry</a>
+          </div>
+          <div class="sidebar categ-physics">
+            <a href="/projects/physics" class="sidebar-categ">Physics</a>
+          </div>
+        </div>
+
+        <div id="template" class="proj">
+          <ul class="proj-title open-proj fa-ul">
+            <li class="title"><span class="fa-li"></span></li>
+            <ul class="proj-caption">
+              <li class="dept"></li>
+              <li class="preview"></li>
+              <li class="desc" style="display: none;"></li>
+              <li><button type="submit" id="continue-apply">Apply</button></li>
+            </ul>
+          </ul>
+          <div class="proj-follow">
+            <button id="follow-btn" type="button" name="button">Follow</button>
+          </div>
+        </div>
+        <div id="proj-col"></div>
+      </div>
+
+      <div class="proj-modal">
+        <div class="proj-modal-content"></div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <section id="footer">
+      <div class="footer-content">
+        <div class="contact">
+          <h3>Contact Us</h3>
+          <p>
+            If you have a question or suggestion, or want to work with us, we'd
+            love to hear from you!
+          </p>
+        </div>
+        <div class="partners">
+          <h3>Partners</h3>
+          <img src="/images/partners.png" alt="" />
+        </div>
+        <div class="people">
+          <h3>People</h3>
+          <p>Alix Cui</p>
+        </div>
+      </div>
+    </section>
+  </body>
+</html>
