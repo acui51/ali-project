@@ -11,6 +11,7 @@ class App {
     this._project = null;
     this._loginForm = null;
     this._gs = null;
+    this._gsSignedIn = null;
 
     this._onLogin = this._onLogin.bind(this);
     this._onError = this._onError.bind(this);
@@ -18,25 +19,25 @@ class App {
   }
 
   async setup() {
-    this._user = JSON.parse(localStorage.getItem("user"));
+    // this._user = JSON.parse(localStorage.getItem("user"));
     this._gs = await GoogleSignin.init(CLIENT_ID);
-    console.log(this._gs.getProfile());
+    this._gsSignedIn = this._gs.getProfile();
 
-    if (this._user) {
+    // If user is Google Signed In
+    if (this._gsSignedIn) {
       // Change login in top-right to a profile image
       let login = document.querySelector("#loginForm");
-      login.remove();
+      login.classList.add("hidden");
       let navbar = document.querySelector(".navbar");
-      navbar.querySelector("#icon").classList.remove("hidden");
+      let icon = navbar.querySelector("#icon");
+      icon.classList.remove("hidden");
 
       // Show Sign out button
       let signOutBtn = document.querySelector("#sign-out");
-      signOutBtn.style.display = "block";
+      signOutBtn.classList.remove("hidden");
       signOutBtn.addEventListener("click", this._onSignOut);
     } else {
-      // Google login
-      this._gs = await GoogleSignin.init(CLIENT_ID);
-
+      // Load Google Login
       document
         .querySelector("#sign-out")
         .addEventListener("click", this._onSignOut);
@@ -61,12 +62,14 @@ class App {
     let profileIcon = document.querySelector("#icon");
     profileIcon.classList.remove("hidden");
     let signOutBtn = document.querySelector("#sign-out");
-    signOutBtn.style.display = "block";
+    signOutBtn.classList.remove("hidden");
 
     // Load or Create User in DB
     this._user = await User.loadOrCreate(this._gs.getProfile());
+    console.log(this._user);
+
     // Set user in localStorage for cross-page retrieval
-    localStorage.setItem("user", JSON.stringify(this._user));
+    // localStorage.setItem("user", JSON.stringify(this._user));
 
     // Goto the profile section of the user
     this._loadProfile();
@@ -78,12 +81,19 @@ class App {
 
   async _onSignOut() {
     await this._gs.signOut();
-    localStorage.clear();
-    document.querySelector("#loginForm").classList.remove("hidden");
     document.querySelector("#icon").classList.add("hidden");
     document.querySelector("#sign-out").classList.add("hidden");
-    // Go back to home page
-    window.location.href = "index.html";
+
+    this._loginForm = document.querySelector("#loginForm");
+    this._gs.renderSignIn(this._loginForm, {
+      longtitle: true,
+      theme: "dark",
+      onsuccess: this._onLogin,
+      onfailure: this._onError,
+    });
+    this._loginForm.classList.remove("hidden");
+
+    // Go Back to Homepage (index.js)
   }
 }
 
