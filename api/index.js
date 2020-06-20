@@ -1,5 +1,4 @@
-"use strict";
-
+require("dotenv").config();
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const express = require("express");
@@ -10,6 +9,8 @@ let api = express.Router();
 let conn;
 let db;
 let Users, Projects, Questions, Applications;
+
+console.log(process.env.CLIENT_ID);
 
 module.exports = async (app) => {
   app.set("json spaces", 2);

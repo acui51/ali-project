@@ -19,6 +19,7 @@ class App {
     this._physics = null;
 
     this._onLogin = this._onLogin.bind(this);
+    this._changePathname = this._changePathname.bind(this);
     this._loadProjectsEvent = this._loadProjectsEvent.bind(this);
     this._followProject = this._followProject.bind(this);
     this._unfollowProject = this._unfollowProject.bind(this);
@@ -105,7 +106,20 @@ class App {
   }
 
   _changePathname(event) {
-    location.pathname = "/projects/" + event.target.id;
+    event.preventDefault();
+    if (event.target.id) {
+      let link = event.target.id;
+      history.pushState(null, null, "projects/" + link);
+      this._category = link;
+      this._loadProjectsEvent();
+    } else if (event.target.href) {
+      let href = event.target.href;
+      history.pushState(null, null, href);
+      this._category = location.pathname.slice(
+        location.pathname.lastIndexOf("/") + 1
+      );
+      this._loadProjectsEvent();
+    }
   }
 
   _loadProjectsEvent() {
@@ -116,9 +130,13 @@ class App {
       categArray[j].classList.add("hidden");
     }
 
-    // Load side bar with project categories
+    // Show side bar with project categories
     let categCol = document.querySelector("#categ-col");
     categCol.classList.remove("hidden");
+    for (let link of categCol.querySelectorAll("a[href]")) {
+      link.addEventListener("click", this._changePathname);
+    }
+
     // Load the project list of clicked category
     this._loadProjectList();
   }
@@ -126,6 +144,7 @@ class App {
   async _loadProjectList() {
     // Blank the project listings
     document.querySelector("#proj-col").textContent = "";
+
     let projectsArray = await Project.getProjects();
     let applyArray = await this._user.getApplied();
     // Load Clicked Category
