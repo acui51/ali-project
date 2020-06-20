@@ -21,14 +21,12 @@ export default class User {
         id: user.id,
         name: user.givenName,
       });
-      return res_create[1].user;
+      return new User(res_create[1]);
     } else {
       // Load the user
       let res = await apiRequest("GET", "/users/" + user.id, null);
-      this.user = res[1];
+      return new User(res[1]);
     }
-    // Call new User and return that
-    return this.user;
   }
 
   constructor(data) {

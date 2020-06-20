@@ -78,7 +78,7 @@ api.post("/users", async (req, res) => {
     qna: {},
   });
   user = await Users.findOne({ id: user });
-  res.json({ user });
+  res.json(user);
 });
 
 // Update User profile

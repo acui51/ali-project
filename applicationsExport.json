@@ -1,0 +1,3 @@
+{"_id":{"$oid":"5eebb4476ca5b9361e3d261f"},"id":"100101874460632063470","projectid":"ml-cardio","qna":{"email":"acui@stanford.edu","year":"2023","experience":"none","school":"Stanford"}}
+{"_id":{"$oid":"5eebb69c29c85436cf258d33"},"id":"100101874460632063470","name":"Alix","projectid":"BP-sensing","qna":{"email":"acui@stanford.edu","year":"2023","experience":"none","school":"Stanford"}}
+{"_id":{"$oid":"5eec1e7b29c85436cf258d34"},"id":"100101874460632063470","name":"Alix","projectid":"gene-expression-data-organization-and-mining","qna":{"email":"acui@stanford.edu","year":"2023","experience":"none","cs-experience":"CS107, CS193X","skills":"I have none","programming":"Typescript","research-experience":"None","school":"Stanford"}}

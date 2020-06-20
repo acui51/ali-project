@@ -10,7 +10,6 @@ class App {
   constructor() {
     this._user = null;
     this._gs = null;
-    this._userUser = null;
     this._project = null;
     this._category = null;
     this._loginForm = null;
@@ -26,12 +25,10 @@ class App {
     this._loadProjectList = this._loadProjectList.bind(this);
     this._displayModal = this._displayModal.bind(this);
     this._applyProject = this._applyProject.bind(this);
+    this._onSignOut = this._onSignOut.bind(this);
   }
 
   async setup() {
-    this._gs = await GoogleSignin.init(CLIENT_ID);
-    console.log(this._gs.getProfile());
-
     // Global event listener for modal
     window.addEventListener("click", (e) => {
       let modal = document.querySelector(".proj-modal");
@@ -41,39 +38,43 @@ class App {
       }
     });
 
-    this._user = JSON.parse(localStorage.getItem("user"));
-    this._user = await User.loadOrCreate(this._user);
+    this._gs = await GoogleSignin.init(CLIENT_ID);
+    this._gsSignedIn = this._gs.getProfile();
+
+    if (this._gsSignedIn) {
+      // Change login in top-right to a profile image
+      let login = document.querySelector("#loginForm");
+      login.classList.add("hidden");
+      let icon = document.querySelector("#icon");
+      icon.classList.remove("hidden");
+
+      let signOutBtn = document.querySelector("#sign-out");
+      signOutBtn.classList.remove("hidden");
+      signOutBtn.addEventListener("click", this._onSignOut);
+
+      this._user = await User.loadOrCreate(this._gsSignedIn);
+    } else {
+      this._loginForm = document.querySelector("#loginForm");
+      this._gs.renderSignIn(this._loginForm, {
+        longtitle: true,
+        theme: "dark",
+        onsuccess: this._onLogin,
+        onfailure: this._onError,
+      });
+    }
+
     // Check URL path if there is a specific category
     let path = location.pathname;
     this._category = path.slice(path.lastIndexOf("/") + 1);
+
     // If the URL path is /projects/biology for example. load that project
     if (this._category !== "projects") {
       // Change padding of project-Categories
       document.querySelector("#projects").style.padding = "1vh 12vw 5vh 12vw";
       this._loadProjectsEvent();
     }
-    if (this._user) {
-      // Change login in top-right to a profile image
-      let login = document.querySelector("#loginForm");
-      login.remove();
-      let iconAnchor = document.createElement("a");
-      iconAnchor.classList.add("item", "last-item");
-      iconAnchor.id = "icon";
-      iconAnchor.href = "profile.html";
-      let iconIcon = document.createElement("i");
-      iconIcon.classList.add("far", "fa-user-circle", "fa-2x");
-      iconAnchor.appendChild(iconIcon);
-
-      let navbar = document.querySelector(".navbar");
-      navbar.appendChild(iconAnchor);
-    } else {
-      // Add event listener to login button
-      this._loginForm = document.querySelector("#loginForm");
-      this._loginForm.login.addEventListener("click", this._onLogin);
-    }
 
     // Add event listeners for each category
-    this._userUser = new User(this._user);
     this._biology = document.querySelector("#biology");
     this._biology.addEventListener("click", this._changePathname);
 
@@ -87,18 +88,20 @@ class App {
     this._physics.addEventListener("click", this._changePathname);
   }
 
-  async _onLogin(event) {
-    // Replace label bar with profile Icon
-    event.preventDefault();
-    let name = this._loginForm.querySelector('input[name="userid"]').value;
-    // Replaces login label with profile icon
+  async _onLogin() {
+    // Replaces login label with profile icon + Sign Out Button
     let loginForm = document.querySelector("#loginForm");
     loginForm.classList.add("hidden");
     let profileIcon = document.querySelector("#icon");
     profileIcon.classList.remove("hidden");
+    let signOutBtn = document.querySelector("#sign-out");
+    signOutBtn.classList.remove("hidden");
 
-    this._user = await User.loadOrCreate(name);
-    localStorage.setItem("user", JSON.stringify(this._user));
+    // Load or Create User in DB
+    this._user = await User.loadOrCreate(this._gs.getProfile());
+
+    // Goto the profile section of the user
+    window.location.href = "profile.html";
   }
 
   _changePathname(event) {
@@ -124,7 +127,7 @@ class App {
     // Blank the project listings
     document.querySelector("#proj-col").textContent = "";
     let projectsArray = await Project.getProjects();
-    let applyArray = await this._userUser.getApplied();
+    let applyArray = await this._user.getApplied();
     // Load Clicked Category
     for (let i = 0; i < projectsArray.length; i++) {
       if (projectsArray[i].category === this._category) {
@@ -190,7 +193,7 @@ class App {
     event.preventDefault();
     let projectID = event.target.classList[0];
     this._project = await Project.loadOrCreate(projectID);
-    this._userUser.addFollow(this._project);
+    this._user.addFollow(this._project);
 
     // Change follow button to unfollow
     event.target.textContent = "Unfollow";
@@ -202,7 +205,7 @@ class App {
     event.preventDefault();
     let projectID = event.target.classList[0];
     this._project = await Project.loadOrCreate(projectID);
-    await this._userUser.deleteFollow(this._project);
+    await this._user.deleteFollow(this._project);
 
     // Change unfollow button to follow
     event.target.textContent = "Follow";
@@ -232,19 +235,29 @@ class App {
     event.preventDefault();
     let projectID = event.target.classList[0];
     let project = await Project.loadOrCreate(projectID);
-    await this._userUser.addApply(project);
+    await this._user.addApply(project);
 
     // Disable button and change text textContent
     event.target.textContent = "Applied";
     event.target.style.backgroundColor = "#2b3da1";
     event.target.disabled = true;
-    // track of the projects they've applied (grey out)
-    // Grab user's qna, projectID, userID -> application object
-    // put in applications collection
   }
 
   _previewText(description) {
     return description.split(" ").slice(0, 19).join(" ");
+  }
+
+  async _onSignOut() {
+    await this._gs.signOut();
+    document.querySelector("#icon").classList.add("hidden");
+    document.querySelector("#sign-out").classList.add("hidden");
+
+    // Go Back to Homepage (index.js)
+    window.location.href = "index.html";
+  }
+
+  _onError() {
+    alert("Error logging in");
   }
 }
 
