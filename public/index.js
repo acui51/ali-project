@@ -19,7 +19,6 @@ class App {
   }
 
   async setup() {
-    // this._user = JSON.parse(localStorage.getItem("user"));
     this._gs = await GoogleSignin.init(CLIENT_ID);
     this._gsSignedIn = this._gs.getProfile();
 
@@ -51,10 +50,6 @@ class App {
     }
   }
 
-  async _loadProfile() {
-    // window.location.href = "profile.html";
-  }
-
   async _onLogin() {
     // Replaces login label with profile icon + Sign Out Button
     let loginForm = document.querySelector("#loginForm");
@@ -68,11 +63,8 @@ class App {
     this._user = await User.loadOrCreate(this._gs.getProfile());
     console.log(this._user);
 
-    // Set user in localStorage for cross-page retrieval
-    // localStorage.setItem("user", JSON.stringify(this._user));
-
     // Goto the profile section of the user
-    this._loadProfile();
+    window.location.href = "profile.html";
   }
 
   _onError() {
@@ -94,6 +86,7 @@ class App {
     this._loginForm.classList.remove("hidden");
 
     // Go Back to Homepage (index.js)
+    window.location.href = "index.html";
   }
 }
 

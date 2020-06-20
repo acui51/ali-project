@@ -2,24 +2,32 @@ import User from "./User.js";
 import Project from "./Project.js";
 import Question from "./Questions.js";
 import EditableText from "./EditableText.js";
+import GoogleSignin from "./GoogleSignin.js";
+
+const CLIENT_ID =
+  "692072543428-b6tg06q1dl44e62ogj7qp6b2gsaoam41.apps.googleusercontent.com";
 
 class App {
   constructor() {
     this._user = null;
-    this._userUser = null; // clas User from User.js
+    this._gs = null;
 
     this._updatePage = this._updatePage.bind(this);
     this._loadProfile = this._loadProfile.bind(this);
     this._deleteFollow = this._deleteFollow.bind(this);
     this._updateQna = this._updateQna.bind(this);
     this._applyProject = this._applyProject.bind(this);
+    this._onSignOut = this._onSignOut.bind(this);
 
     this._displayName = new EditableText("name");
     this._displaySchool = new EditableText("school");
   }
 
   async setup() {
-    this._user = JSON.parse(localStorage.getItem("user"));
+    // this._user = JSON.parse(localStorage.getItem("user"));
+    this._gs = await GoogleSignin.init(CLIENT_ID);
+    this._user = await User.loadOrCreate(this._gs.getProfile());
+
     // Editable Text for School and name
     let parentName = document.querySelector("#nameContainer");
     this._displayName.addToDOM(parentName, this._updatePage);
@@ -39,13 +47,17 @@ class App {
       questionsSec.appendChild(node);
     }
 
-    this._userUser = new User(this._user);
+    // Show Sign out button
+    let signOutBtn = document.querySelector("#sign-out");
+    signOutBtn.classList.remove("hidden");
+    signOutBtn.addEventListener("click", this._onSignOut);
+
     this._loadProfile();
   }
 
   async _loadProfile() {
     // Set qna
-    let qna = await this._userUser.getQna();
+    let qna = await this._user.getQna();
     for (let question in qna) {
       let questionInput = document.querySelector("#" + question);
       questionInput.querySelector("span").textContent = qna[question];
@@ -55,7 +67,7 @@ class App {
     this._displayName.setValue(this._user.name);
     this._displaySchool.setValue(this._user.school);
 
-    let following = await this._userUser.getFollowing();
+    let following = await this._user.getFollowing();
     // Reset following projects
     document.querySelector("#follow").textContent = "";
 
@@ -88,7 +100,7 @@ class App {
       node.querySelector(".dept").textContent = following[i].department;
 
       // Alter the Apply button if already applied
-      let applyArray = await this._userUser.getApplied();
+      let applyArray = await this._user.getApplied();
       let applyButton = node.querySelector("#continue-apply");
       applyButton.classList.add(following[i].id);
       if (applyArray.some((apply) => apply.id === following[i].id)) {
@@ -108,15 +120,15 @@ class App {
   async _updatePage() {
     this._user.name = this._displayName.value;
     this._user.school = this._displaySchool.value;
-    Object.assign(this._userUser, this._user);
-    await this._userUser.save();
+    Object.assign(this._user, this._user);
+    await this._user.save();
     localStorage.setItem("user", JSON.stringify(this._user));
     this._loadProfile();
   }
 
   async _deleteFollow(event) {
     this._project = await Project.loadOrCreate(event.target.id);
-    await this._userUser.deleteFollow(this._project);
+    await this._user.deleteFollow(this._project);
     this._loadProfile();
   }
 
@@ -124,8 +136,8 @@ class App {
     let questionID = input.id;
     let answer = input.value;
     this._user.qna[questionID] = answer;
-    Object.assign(this._userUser, this._user);
-    await this._userUser.save();
+    Object.assign(this._user, this._user);
+    await this._user.save();
     localStorage.setItem("user", JSON.stringify(this._user));
     this._loadProfile();
   }
@@ -135,15 +147,25 @@ class App {
     let userID = this._user.id;
     let projectID = event.target.classList[0];
     let project = await Project.loadOrCreate(projectID);
-    await this._userUser.addApply(project);
+    await this._user.addApply(project);
 
     // Disable button and change text textContent
     event.target.textContent = "Applied";
     event.target.style.backgroundColor = "#2b3da1";
     event.target.disabled = true;
-    // Grab user's qna, projectID, userID -> application object
+  }
 
-    // put in applications collection
+  async _onSignOut() {
+    await this._gs.signOut();
+    document.querySelector("#icon").classList.add("hidden");
+    document.querySelector("#sign-out").classList.add("hidden");
+
+    // Go Back to Homepage (index.js)
+    window.location.href = "index.html";
+  }
+
+  _onError() {
+    alert("Error logging in");
   }
 }
 
