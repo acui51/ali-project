@@ -1,0 +1,7 @@
+{"_id":{"$oid":"5ed4ad5fe7fcbceed8e44498"},"id":"email","question":"Email: ","textarea":0.0}
+{"_id":{"$oid":"5ed4adc5e7fcbceed8e4449a"},"id":"year","question":"Year of Study","textarea":0.0}
+{"_id":{"$oid":"5ed4adfce7fcbceed8e4449b"},"id":"experience","question":"What coursework or experience do you find relevant to this project?","textarea":1.0}
+{"_id":{"$oid":"5ed4ae2ee7fcbceed8e4449c"},"id":"cs-experience","question":"Which computer science classes have you completed or are currently taking?","textarea":0.0}
+{"_id":{"$oid":"5ed4ae95e7fcbceed8e4449d"},"id":"skills","question":"Skills","textarea":0.0,"list":1.0}
+{"_id":{"$oid":"5ed4aeb3e7fcbceed8e4449e"},"id":"programming","question":"Programming Languages","textarea":0.0,"list":1.0}
+{"_id":{"$oid":"5ed4aefee7fcbceed8e4449f"},"id":"research-experience","question":"If you have previous research experience, describe it","textarea":1.0}
