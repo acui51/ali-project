@@ -23,9 +23,9 @@ INSTALLING MONGODB:
 5a. In your MongoDB shell, create a database to store the web app information locally. Do this by running `use <insert database name>`
 
 5b. Create 4 collections within this database by running (might not need to do this):
-`db.createCollection("users")`
-`db.createCollection("questions")`
-`db.createCollection("applications")`
+`db.createCollection("users")`  
+`db.createCollection("questions")`  
+`db.createCollection("applications")`  
 `db.createCollection("projects")`
 
 RUNNING THE WEB APP:
@@ -36,9 +36,9 @@ RUNNING THE WEB APP:
 
 3. Run these 4 commands <em>in the directory<em> you cloned this rep, NOT the MongoDB shell. This will install data into your local MongoDB database (i.e. some small projects, the questions, etc)
 
-`mongoimport --db <insert database name> --collection users --file usersExport.json`
-`mongoimport --db <insert database name> --collection projects --file projectsExport.json`
-`mongoimport --db <insert database name> --collection applications --file applicationsExport.json`
+`mongoimport --db <insert database name> --collection users --file usersExport.json`  
+`mongoimport --db <insert database name> --collection projects --file projectsExport.json`  
+`mongoimport --db <insert database name> --collection applications --file applicationsExport. json`
 `mongoimport --db <insert database name> --collection questions --file questionsExport.json`
 
 4. Open the `index.js` file in the `api` directory:
