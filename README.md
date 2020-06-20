@@ -38,7 +38,7 @@ RUNNING THE WEB APP:
 
 `mongoimport --db <insert database name> --collection users --file usersExport.json`  
 `mongoimport --db <insert database name> --collection projects --file projectsExport.json`  
-`mongoimport --db <insert database name> --collection applications --file applicationsExport. json`
+`mongoimport --db <insert database name> --collection applications --file applicationsExport. json`  
 `mongoimport --db <insert database name> --collection questions --file questionsExport.json`
 
 4. Open the `index.js` file in the `api` directory:
