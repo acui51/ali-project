@@ -77,7 +77,7 @@ api.post("/users", async (req, res) => {
     applied: [],
     qna: {},
   });
-  user = await Users.findOne({ id: user });
+  let user = await Users.findOne({ id: req.body.id });
   res.json(user);
 });
 
