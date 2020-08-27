@@ -1,5 +1,5 @@
-UPDATE: New Applied Learning Iniative is in the works!
+UPDATE: New Applied Learning Initiative is in the works!
 
-Applied Learning Iniative
+Applied Learning Initiative
 
 
